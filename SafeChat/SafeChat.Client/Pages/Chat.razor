@@ -1,0 +1,22 @@
+﻿@page "/chat"
+
+@using Microsoft.AspNetCore.Authorization
+@inject NavigationManager NavMan
+@attribute [Authorize]
+@rendermode InteractiveAuto
+
+<PageTitle>Heringer Chat</PageTitle>
+
+<h1>You are authenticated</h1>
+
+<AuthorizeView>
+    Hello @context.User.Identity?.Name!
+</AuthorizeView>
+
+@code{
+    private Microsoft.AspNetCore.SignalR.Client.HubConnection hubConnection;
+    private List<string> messages = new List<string>();
+    private string messageInput;
+
+
+}
