@@ -28,7 +28,7 @@
             <hr />
             <ValidationSummary class="text-danger" role="alert" />
             <div class="form-floating mb-3">
-                <InputText @bind-Value="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                <InputText @bind-Value="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@heringer-consulting.de" />
                 <label for="email">Email</label>
                 <ValidationMessage For="() => Input.Email" class="text-danger" />
             </div>
@@ -67,6 +67,10 @@
 
     public async Task RegisterUser(EditContext editContext)
     {
+        int atIndex = Input.Email.IndexOf('@');
+        string emailHeringer = Input.Email.Substring(atIndex + 1);
+        if (emailHeringer != "heringer-consulting.de") return;
+
         var user = CreateUser();
 
         await UserStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);

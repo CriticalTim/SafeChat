@@ -6,10 +6,17 @@ namespace SafeChat.Hubs
     {
         public async Task SendMessage(string user, string message) 
         { 
+
             await Clients.All.SendAsync("RecieveMessage", user, message);
+
         }
 
-        public async Task IsConnected(string user)
+        public async Task SendMessageExceptUser(string user, string message)
+        {
+            await Clients.AllExcept(user).SendAsync("RecieveMessage", user, message);
+        }
+
+        public async Task IsConnecting(string user)
         {
             await Clients.All.SendAsync("ConnectionSuccess", user);
         }

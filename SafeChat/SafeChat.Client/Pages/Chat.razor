@@ -1,22 +1,239 @@
 ﻿@page "/chat"
-
+@using Microsoft.AspNetCore.SignalR.Client
 @using Microsoft.AspNetCore.Authorization
+@using System.Security.Claims;
 @inject NavigationManager NavMan
+@inject AuthenticationStateProvider persAuth
 @attribute [Authorize]
-@rendermode InteractiveAuto
+@rendermode InteractiveWebAssembly
 
-<PageTitle>Heringer Chat</PageTitle>
 
-<h1>You are authenticated</h1>
 
 <AuthorizeView>
-    Hello @context.User.Identity?.Name!
+
+
+    @if (isConnected())
+    {
+
+        <div class="cp-chatbox">
+            
+
+                @foreach (var message in messages)
+                {
+                    <div class="cp-message-send">
+                        @message
+                    </div>
+                }
+
+
+            
+        <div class="chat-input">
+            <input class="cyberpunk-input" type="text" @bind="messageInput" @onkeyup="HandleKeyUp" />
+            <button @onclick="Send" class="cyberpunk-button">Senden</button>
+        </div>
+                
+            
+        </div>
+        
+
+    }
+    else
+    {
+        <p>Loading ...</p>
+    }
+
+<style>
+
+    
+
+    .message {
+        margin-bottom: 5px;
+        padding: 5px;
+        border-radius: 4px;
+        background-color: lightgray;
+        border-radius: 4px;
+    }
+
+    .chat-container {
+        position: fixed;
+        bottom: 0;
+        top:56px;
+        height:90%;
+        background: #eee;        
+        border: 1px solid #ddd;
+        background-color: #f9f9f9;
+        border: 2px solid #212121;
+        border-radius: 4px;
+        z-index:0;
+    }
+
+    @@media (max-width: 768px) {
+        .chat-container {
+           top: 112px;
+           height:83%;
+           
+        }
+}
+    .chat-input {
+        position: fixed;
+        bottom: 0;
+        
+    }
+
+        .chat-input input[type="text"] {
+            width: 450px;
+            padding: 10px;
+            margin: 5px;
+        }
+
+        .chat-input input[type="submit"] {
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            cursor: pointer;
+        }
+
+    .cyberpunk-input {
+        
+        width: 450px;
+        padding: 10px;
+        margin: 5px;
+        background-color: white; /* Dark background for inputs and buttons */
+        border: 1px solid dodgerblue; /* Neon green border */
+        color: dodgerblue; /* Neon green text */
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        outline: none; /* Removes the default focus outline */
+        transition: background-color 0.3s, box-shadow 0.3s; /* Smooth transitions for interaction */
+    }
+    .cyberpunk-button {
+        
+        background-color: white; /* Dark background for inputs and buttons */
+        border: 1px solid dodgerblue; /* Neon green border */
+        color: dodgerblue; /* Neon green text */
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 5px;
+        outline: none; /* Removes the default focus outline */
+        transition: background-color 0.3s, box-shadow 0.3s; /* Smooth transitions for interaction */
+        cursor: pointer; /* Changes cursor to pointer on hover */
+        padding: 10px;
+        margin: 5px;
+    }
+
+
+        .cyberpunk-button:hover, .cyberpunk-button:focus {
+            background-color: lightskyblue; /* Slightly lighter background on hover/focus */
+            box-shadow: 0 0 10px dodgerblue; /* Glowing effect on hover/focus */
+        }
+
+    .cyberpunk-input:focus, .cyberpunk-input:hover {
+        background-color: lightskyblue; /* Slightly lighter background on focus/hover */
+        box-shadow: 0 0 10px dodgerblue; /* Glowing effect on focus/hover */
+    }
+
+    .cyberpunk-input::placeholder {
+        color: #5f5;
+        opacity: 1; /* Fully opaque placeholder text */
+    }
+
+    .cyperpunk-chatbox {
+        background-color: white; /* Dark background for contrast */
+        font-family: 'Courier New', monospace; /* Monospace font for a techy feel */
+        color: dodgerblue; /* Bright green text, typical of cyberpunk themes */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+    .cp-chatbox {
+        position: fixed;
+        bottom: 0;
+        width: 50%;
+        height: 90%;
+        border: 1px solid dodgerblue; /* Neon green border */
+        background-color: white; /* Dark background for the chatbox */
+        overflow-y: auto; /* Allows scrolling */
+        padding: 10px;
+        box-shadow: 0 0 10px dodgerblue; /* Glowing effect for the chatbox */
+        border-radius: 10px;
+    }
+
+    .cp-message-send {
+        background-color: lightgray; /* Slightly lighter background for messages */
+        margin: 5px 0;
+        padding: 5px;
+        border-radius: 3px;
+        color: black;
+        width:50%;
+    }
+</style>
+
+
 </AuthorizeView>
 
 @code{
-    private Microsoft.AspNetCore.SignalR.Client.HubConnection hubConnection;
+    private HubConnection hubConnection;
     private List<string> messages = new List<string>();
-    private string messageInput;
+    private string? messageInput;
+    public string? username;
+    public string? userShort;
+    private IEnumerable<Claim> _claims = Enumerable.Empty<Claim>();
 
 
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        hubConnection = new HubConnectionBuilder()
+            .WithUrl(NavMan.ToAbsoluteUri("/chathub"))
+            .Build();
+
+        hubConnection.On<string, string>("RecieveMessage", (user, message) =>
+        {
+            var encodingMsg = $"{user}: {message}";
+            messages.Add(encodingMsg);
+            InvokeAsync(StateHasChanged);
+        });
+
+        await hubConnection.StartAsync();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await GetClaimsPrincipalData();
+        await base.OnParametersSetAsync();
+    }
+
+    public async Task GetClaimsPrincipalData()
+    {
+        var authState = await persAuth.GetAuthenticationStateAsync();
+        username = authState.User.Identity?.Name;
+        int atIndex = username.IndexOf('@');
+        userShort = username.Substring(0, atIndex);
+
+    }
+
+    Task Send() {
+        hubConnection.SendAsync("SendMessage", userShort, messageInput);
+
+        return Task.CompletedTask;
+    }
+
+    Task HandleKeyUp(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            Send();
+        }
+        return Task.CompletedTask;
+    }
+
+    public bool isConnected()
+    {
+        if (hubConnection.State == HubConnectionState.Connected) return true;
+        else return false;
+    }
 }
