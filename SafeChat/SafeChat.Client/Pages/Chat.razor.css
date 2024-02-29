@@ -1,6 +1,10 @@
 ﻿<style >
 
-
+html {
+    /*background-color: coral;*/
+  
+    background-color:#1f50b5;
+}
 
 .message {
     margin-bottom: 5px;
@@ -23,7 +27,7 @@
     z-index: 0;
 }
 
-@@media (max-width: 768px) {
+@media (max-width: 768px) {
     .chat-container {
         top: 112px;
         height: 83%;
@@ -35,6 +39,7 @@
     bottom: 0;
     margin-bottom: 20px;
     width: 50%;
+    z-index:1;
 }
 
 /*.chat-input input[type="text"] {
@@ -117,14 +122,35 @@
     box-shadow: 0 0 10px dodgerblue; /* Glowing effect for the chatbox */
     border-radius: 10px;
     margin-bottom: 20px;
+    z-index:0;
 }
-/**/ @@media screen and (max-width: 400px) {
+.cp-chatbox-box {
+    position: fixed;
+    bottom: 0;
+    width: 47%;
+    height: 80%;
+    border: 1px solid dodgerblue; /* Neon green border */
+    background-color: white; /* Dark background for the chatbox */
+    overflow-y: auto; /* Allows scrolling */
+    padding: 10px;
+    box-shadow: 0 0 10px dodgerblue; /* Glowing effect for the chatbox */
+    border-radius: 10px;
+    margin-bottom: 100px;
+    z-index:1;
+}
+
+/**/ @media screen and (max-width: 400px) {
     .cp-chatbox {
-        width: 80%;
+        width: 90%;
         height: 80%;
     }
-
-    .cyberpunk-button {
+    .cp-chatbox-box {
+        height:70%;
+        width: 85%;
+        margin-bottom:80px;
+    
+    }
+        .cyberpunk-button {
         width: 30%
     }
 
@@ -140,10 +166,15 @@
     }
 }
 
-@@media screen and (min-width: 401px) and (max-width: 767px) {
+@media screen and (min-width: 401px) and (max-width: 767px) {
     .cp-chatbox {
-        width: 80%;
+        width: 90%;
         height: 85%;
+    }
+    .cp-chatbox-box {
+        height: 77%;
+        width: 85%;
+        margin-bottom: 80px;
     }
 
     .cyberpunk-button {
@@ -181,4 +212,3 @@
     width: 50%;
 }
 
-</style >
