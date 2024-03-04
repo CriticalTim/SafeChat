@@ -3,7 +3,7 @@
 @using Microsoft.AspNetCore.SignalR.Client
 @using Microsoft.AspNetCore.Authorization
 @using System.Security.Claims;
-
+@using Microsoft.JSInterop;
 @inject NavigationManager NavMan
 @inject AuthenticationStateProvider persAuth
 @inject IJSRuntime JsRuntime
@@ -11,7 +11,6 @@
 @attribute [Authorize]
 @rendermode InteractiveWebAssembly
 
-<div class="body">
 
     <AuthorizeView>
 
@@ -24,19 +23,19 @@
 
             <div class="cp-chatbox">
 
-                <div class="cp-chatbox-box">
+                <div @ref="chatWindow" class="cp-chatbox-box">
                     @foreach (var message in messages)
                     {
                         <div class="cp-message-send">
                             @message
                         </div>
                     }
-                    @foreach (var message2 in messagesSend)
+                    @*@foreach (var message2 in messagesSend)
                     {
                         <div class="cp-message">
                             @message2
                         </div>
-                    }
+                    }*@
 
                 </div>
 
@@ -62,26 +61,21 @@
 
 
     </AuthorizeView>
-</div>
 
-@*<script type="text/javascript">
-function scrollToBottom(id) {
-  var element = document.getElementById(id);
-  element.scrollTop = element.scrollHeight;
-}
-</script>*@
+
+
 
 
 @code{
     private HubConnection hubConnection;
     private List<string> messages = new List<string>();
     private List<string> messagesSend = new List<string>();
-    private string? messageInput;
+    private string? messageInput ="Hier kommt Text rein :)";
     public string? username;
     public string? userShort;
     private IEnumerable<Claim> _claims = Enumerable.Empty<Claim>();
 
-    private ElementReference chatWindow;
+    ElementReference chatWindow;
 
     protected override async Task OnInitializedAsync()
     {
@@ -94,7 +88,7 @@ function scrollToBottom(id) {
         {
             var encodingMsg = $"{user}: {message}";
             messages.Add(encodingMsg);
-
+            JsRuntime.InvokeVoidAsync("scrollToEnd", new object[] { chatWindow });
             InvokeAsync(StateHasChanged);
         });
 
@@ -121,7 +115,6 @@ function scrollToBottom(id) {
         hubConnection.SendAsync("SendMessageExceptUser", userShort, messageInput);
 
         messagesSend.Add(messageInput);
-        //await JsRuntime.InvokeVoidAsync("scrollToBottom", "chatWindow");
         InvokeAsync(StateHasChanged);
 
         return Task.CompletedTask;
@@ -148,20 +141,17 @@ function scrollToBottom(id) {
         else return false;
     }
 
-    //private async Task ScrollToBottom()
-    //{
-    //    await JsRuntime.InvokeVoidAsync("scrollToBottom", "chatWindow");
-    //}
+    void ScrollToEnd()
+    {
+        JsRuntime.InvokeVoidAsync("scrollToEnd", new object[] { chatWindow });
+    }
 
-    //protected override async Task OnAfterRenderAsync(bool firstRender)
-    //{
-    //    if (firstRender)
-    //    {
-    //        await ScrollToBottom();
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
 
-    //        StateHasChanged();
-    //    }
-    //}
+        ScrollToEnd();
+
+    }
 
 
 }
