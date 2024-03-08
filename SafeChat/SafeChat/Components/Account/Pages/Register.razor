@@ -67,9 +67,7 @@
 
     public async Task RegisterUser(EditContext editContext)
     {
-        int atIndex = Input.Email.IndexOf('@');
-        string emailHeringer = Input.Email.Substring(atIndex + 1);
-        if (emailHeringer != "heringer-consulting.de") return;
+        
 
         var user = CreateUser();
 

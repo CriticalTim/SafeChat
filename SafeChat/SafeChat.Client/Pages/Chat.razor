@@ -20,7 +20,7 @@
 
         @if (isConnected())
         {
-
+            
             <div class="cp-chatbox">
 
                 <div @ref="chatWindow" class="cp-chatbox-box">
@@ -30,12 +30,12 @@
                             @message
                         </div>
                     }
-                    @*@foreach (var message2 in messagesSend)
+                    @foreach (var message2 in messagesSend)
                     {
                         <div class="cp-message">
                             @message2
                         </div>
-                    }*@
+                    }
 
                 </div>
 
@@ -43,10 +43,11 @@
 
 
                 <div class="chat-input">
-                    <input class="cyberpunk-input" type="text" @bind="messageInput" @onkeyup="HandleKeyUp" />
+                    <input class="cyberpunk-input" type="text" @bind="messageInput" @onkeyup="HandleKeyUp" placeholder="Nachricht schreiben" />
                     <button @onclick="Send" class="cyberpunk-button">Senden</button>
                 </div>
 
+               
 
             </div>
 
@@ -70,7 +71,7 @@
     private HubConnection hubConnection;
     private List<string> messages = new List<string>();
     private List<string> messagesSend = new List<string>();
-    private string? messageInput ="Hier kommt Text rein :)";
+    private string? messageInput = String.Empty;
     public string? username;
     public string? userShort;
     private IEnumerable<Claim> _claims = Enumerable.Empty<Claim>();
@@ -87,9 +88,13 @@
         hubConnection.On<string, string>("RecieveMessageAll", (user, message) =>
         {
             var encodingMsg = $"{user}: {message}";
-            messages.Add(encodingMsg);
-            JsRuntime.InvokeVoidAsync("scrollToEnd", new object[] { chatWindow });
-            InvokeAsync(StateHasChanged);
+            if(user != userShort)
+            {
+                messages.Add(encodingMsg);
+                JsRuntime.InvokeVoidAsync("scrollToEnd", new object[] { chatWindow });
+                InvokeAsync(StateHasChanged);
+            }
+
         });
 
         await hubConnection.StartAsync();

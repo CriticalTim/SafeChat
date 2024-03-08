@@ -1,34 +1,4 @@
-﻿/*body {
-    background-color: dodgerblue;
-}*/
-#input{
-    color:black;
-}
-    #input::-webkit-input-placeholder { /* WebKit, Blink, Edge */
-        color: black;
-    }
-
-#input:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-    color: black;
-    opacity: 1;
-}
-
-#input::-moz-placeholder { /* Mozilla Firefox 19+ */
-    color: black;
-    opacity: 1;
-}
-
-:-ms-input-placeholder { /* Internet Explorer 10-11 */
-    color: black;
-}
-
-::-ms-input-placeholder { /* Microsoft Edge */
-    color: black;
-}
-
-#input:placeholder { /* Most modern browsers support this now. */
-    color: black;
-}
+﻿
 .message {
     margin-bottom: 5px;
     padding: 5px;
@@ -84,7 +54,7 @@
     margin-left: 5%;
     background-color: white; /* Dark background for inputs and buttons */
     border: 1px solid dodgerblue; /* Neon green border */
-    color: black; /* Neon green text */
+    color: darkblue; /* Neon green text */
     padding: 10px 20px;
     font-size: 16px;
     border-radius: 5px;
@@ -118,7 +88,7 @@
 }
 
 .cyberpunk-input::placeholder {
-    color: #5f5;
+    color: black;
     opacity: 1; /* Fully opaque placeholder text */
 }
 
@@ -138,14 +108,14 @@
     bottom: 0;
     width: 50%;
     height: 90%;
-    border: 1px solid dodgerblue; /* Neon green border */
-    background-color: white; /* Dark background for the chatbox */
-    
+    border: 1px solid darkblue; /* Neon green border */
+    background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #1b6ec2 70%); /* Dark background for the chatbox */
+
     padding: 10px;
     box-shadow: 0 0 10px dodgerblue; /* Glowing effect for the chatbox */
     border-radius: 10px;
     margin-bottom: 20px;
-    z-index:0;
+    z-index: 0;
     color: black;
 }
 .cp-chatbox-box {
