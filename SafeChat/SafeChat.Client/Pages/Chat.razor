@@ -96,8 +96,10 @@
         hubConnection.On<string, string>("RecieveMessageAll", (user, message) =>
         {
             var encodingMsg = $"{user}: {message}";
+
             if (user == userShort) isMe = true;
             else isMe = false;
+
             messages.Add(encodingMsg);
             JsRuntime.InvokeVoidAsync("scrollToEnd", new object[] { chatWindow });
             InvokeAsync(StateHasChanged);
@@ -105,12 +107,24 @@
 
         });
 
+        hubConnection.On<string>("Connected", (user) =>
+        {
+            if (!contacts.Contains(user))
+            {
+                contacts.Add(user);
+            }
+            InvokeAsync(StateHasChanged);
+        });
+
+
         await hubConnection.StartAsync();
+
     }
 
     protected override async Task OnParametersSetAsync()
     {
         await GetClaimsPrincipalData();
+        await hubConnection.SendAsync("IAmOnline", userShort);
         await base.OnParametersSetAsync();
     }
 

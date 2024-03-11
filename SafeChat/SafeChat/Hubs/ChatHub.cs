@@ -15,5 +15,10 @@ namespace SafeChat.Hubs
         {
             await Clients.AllExcept(user).SendAsync("RecieveMessageAll", user, message);
         }
+
+        public async Task IAmOnline(string user)
+        {
+            await Clients.All.SendAsync("Connected", user);
+        }
     }
 }
