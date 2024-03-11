@@ -15,10 +15,5 @@ namespace SafeChat.Hubs
         {
             await Clients.AllExcept(user).SendAsync("RecieveMessageAll", user, message);
         }
-
-        public async Task IsConnecting(string user)
-        {
-            await Clients.All.SendAsync("ConnectionSuccess", user);
-        }
     }
 }

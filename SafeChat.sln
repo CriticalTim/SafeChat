@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34511.84
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SafeChat", "SafeChat\SafeChat\SafeChat.csproj", "{3586D6F4-7252-4E7F-B3E1-1C652F076D83}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SafeChat", "SafeChat\SafeChat\SafeChat.csproj", "{3586D6F4-7252-4E7F-B3E1-1C652F076D83}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SafeChat.Client", "SafeChat\SafeChat.Client\SafeChat.Client.csproj", "{C14B7264-77E1-428A-AE8B-662E3057E815}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SafeChat.Client", "SafeChat\SafeChat.Client\SafeChat.Client.csproj", "{C14B7264-77E1-428A-AE8B-662E3057E815}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

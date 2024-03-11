@@ -1,52 +1,10 @@
-﻿
-.message {
-    margin-bottom: 5px;
-    padding: 5px;
-    border-radius: 4px;
-    background-color: lightgray;
-    border-radius: 4px;
-}
-
-.chat-container {
-    position: fixed;
-    bottom: 0;
-    top: 56px;
-    height: 90%;
-    background: #eee;
-    border: 1px solid #ddd;
-    background-color: #f9f9f9;
-    border: 2px solid #212121;
-    border-radius: 4px;
-    z-index: 0;
-}
-
-@media (max-width: 768px) {
-    .chat-container {
-        top: 112px;
-        height: 83%;
-    }
-}
-
-.chat-input {
+﻿.chat-input {
     position: fixed;
     bottom: 0;
     margin-bottom: 20px;
     width: 50%;
     z-index:1;
 }
-
-/*.chat-input input[type="text"] {
-            width: 450px;
-            padding: 10px;
-            margin: 5px;
-        }
-
-        .chat-input input[type="submit"] {
-            padding: 10px;
-            margin: 5px;
-            border: 1px solid #ddd;
-            cursor: pointer;
-        }*/
 
 .cyberpunk-input {
     width: 55%;
@@ -92,21 +50,10 @@
     opacity: 1; /* Fully opaque placeholder text */
 }
 
-.cyperpunk-chatbox {
-    background-color: white; /* Dark background for contrast */
-    font-family: 'Courier New', monospace; /* Monospace font for a techy feel */
-    color: dodgerblue; /* Bright green text, typical of cyberpunk themes */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-}
-
 .cp-chatbox {
     position: fixed;
     bottom: 0;
-    width: 50%;
+    width: 65%;
     height: 90%;
     border: 1px solid darkblue; /* Neon green border */
     background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #1b6ec2 70%); /* Dark background for the chatbox */
@@ -133,19 +80,19 @@
     z-index:1;
 }
 
-/**/ @media screen and (max-width: 400px) {
+@media screen and (max-width: 400px) {
     .cp-chatbox {
         width: 90%;
         height: 80%;
     }
     .cp-chatbox-box {
         height:70%;
-        width: 85%;
+        width: 65%;
         margin-bottom:80px;
     
     }
         .cyberpunk-button {
-        width: 30%
+        width: 33%
     }
 
     .chat-input {
@@ -157,6 +104,10 @@
 
     .cp-message-send {
         width: 80%;
+    }
+    .contacts{
+        width:85%;
+        right:85%;
     }
 }
 
@@ -181,13 +132,31 @@
         margin-bottom: 20px;
         width: 80%;
     }
-    /*.cp-message-send {
-            width: 80%;
-        }*/
+
+    
+}
+@media screen and (min-width: 1500px) and (max-width: 1700px) {
+
+    .cp-chatbox-box {
+        height: 77%;
+    }
+    .contacts {
+        right: 50%;
+
+    }
+
+
+}
+
+@media screen and (min-width: 2000px) {
+    .cp-chatbox {
+        width: 70%;
+    }
+
 }
 
 .cp-message-send {
-    background-color: lightgray; /* Slightly lighter background for messages */
+    background-color: lightgray; /* Slightly lighter background for messages*/ 
     margin-right: 50%;
     margin: 5px 0;
     padding: 5px;
@@ -205,4 +174,33 @@
     color: black;
     width: 50%;
 }
+.contacts {
+    right:22%;
+    width:15%;
+    position: fixed;
+    border-left: 1px solid dodgerblue; /* Neon border */
+    background-color: white; /* Darker background for contacts */
+    color: black; /* Neon text */
+    overflow-y: auto;
+    background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #1b6ec2 70%);
+}
+
+.cp-contact {
+    padding: 10px;
+    border-bottom: 1px solid dodgerblue; /* Neon border */
+    background-color: white;
+    border-radius: 3px;
+    margin-bottom:10px;
+
+}
+    /*.cp-contact:hover {
+        background-color: #1b6ec2;*/ /* Hover effect */
+        /*cursor: pointer;*/
+    /*}*/
+
+.cp-chatbox, .cp-chatbox-box, .cyberpunk-button, .cyberpunk-input, .cp-contact {
+    border-color: #00FFFF;
+    box-shadow: 0 0 15px rgba(0, 255, 255, 0.75);
+}
+
 

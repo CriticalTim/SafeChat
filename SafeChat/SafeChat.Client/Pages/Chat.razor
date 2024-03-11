@@ -21,34 +21,38 @@
         @if (isConnected())
         {
             
-            <div class="cp-chatbox">
+            <div class=" cp-chatbox">
 
-                <div @ref="chatWindow" class="cp-chatbox-box">
-                    @foreach (var message in messages)
-                    {
-                        <div class="cp-message-send">
-                            @message
-                        </div>
-                    }
-                    @foreach (var message2 in messagesSend)
-                    {
-                        <div class="cp-message">
-                            @message2
-                        </div>
-                    }
+                    <div @ref="chatWindow" class="cp-chatbox-box">
+                        @foreach (var message in messages)
+                        {
+                            <div class="cp-message-send">
+                                @message
+                            </div>
+                        }
+                        @foreach (var message2 in messagesSend)
+                        {
+                            <div class="cp-message">
+                                @message2
+                            </div>
+                        }
 
-                </div>
+                    </div>
 
+                    <div class="chat-input">
+                        <input class="cyberpunk-input" type="text" @bind="messageInput" @onkeyup="HandleKeyUp" placeholder="Nachricht schreiben" />
+                        <button @onclick="Send" class="cyberpunk-button">Senden</button>
+                    </div>
 
-
-
-                <div class="chat-input">
-                    <input class="cyberpunk-input" type="text" @bind="messageInput" @onkeyup="HandleKeyUp" placeholder="Nachricht schreiben" />
-                    <button @onclick="Send" class="cyberpunk-button">Senden</button>
-                </div>
-
-               
-
+                    <div class="cp-chatbox-box contacts">
+                        @foreach (var contact in contacts)
+                        {
+                            <div class="cp-contact">
+                                @contact
+                            </div>
+                        }
+                    </div>
+                
             </div>
 
 
@@ -71,6 +75,7 @@
     private HubConnection hubConnection;
     private List<string> messages = new List<string>();
     private List<string> messagesSend = new List<string>();
+    private List<string> contacts = new List<string> { "Tim.storbeck", "max.mustermann" };
     private string? messageInput = String.Empty;
     public string? username;
     public string? userShort;
@@ -118,9 +123,12 @@
     Task Send()
     {
         hubConnection.SendAsync("SendMessageExceptUser", userShort, messageInput);
+        if(messageInput != String.Empty)
+        {
+            messagesSend.Add(messageInput);
+            InvokeAsync(StateHasChanged);
+        }
 
-        messagesSend.Add(messageInput);
-        InvokeAsync(StateHasChanged);
 
         return Task.CompletedTask;
     }
