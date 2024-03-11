@@ -26,17 +26,10 @@
                     <div @ref="chatWindow" class="cp-chatbox-box">
                         @foreach (var message in messages)
                         {
-                            <div class="cp-message-send">
+                            <div class="@(isMe ? "cp-message" : "cp-message-send")">
                                 @message
                             </div>
-                        }
-                        @foreach (var message2 in messagesSend)
-                        {
-                            <div class="cp-message">
-                                @message2
-                            </div>
-                        }
-
+                        } 
                     </div>
 
                     <div class="chat-input">
@@ -45,12 +38,20 @@
                     </div>
 
                     <div class="cp-chatbox-box contacts">
-                        @foreach (var contact in contacts)
+                        @if (contacts != null && (contacts.Count() > 0))
                         {
-                            <div class="cp-contact">
-                                @contact
-                            </div>
+                            @foreach (var contact in contacts)
+                            {
+                                <div class="cp-contact">
+                                    @contact
+                                </div>
+                            }
                         }
+                        else
+                        {
+                        <p><span>No Coctacts found..</span></p>
+                        }
+
                     </div>
                 
             </div>
@@ -75,10 +76,12 @@
     private HubConnection hubConnection;
     private List<string> messages = new List<string>();
     private List<string> messagesSend = new List<string>();
-    private List<string> contacts = new List<string> { "Tim.storbeck", "max.mustermann" };
+    private List<string> contacts = new List<string>();
+
     private string? messageInput = String.Empty;
     public string? username;
     public string? userShort;
+    bool isMe = false;
     private IEnumerable<Claim> _claims = Enumerable.Empty<Claim>();
 
     ElementReference chatWindow;
@@ -93,12 +96,12 @@
         hubConnection.On<string, string>("RecieveMessageAll", (user, message) =>
         {
             var encodingMsg = $"{user}: {message}";
-            if(user != userShort)
-            {
-                messages.Add(encodingMsg);
-                JsRuntime.InvokeVoidAsync("scrollToEnd", new object[] { chatWindow });
-                InvokeAsync(StateHasChanged);
-            }
+            if (user == userShort) isMe = true;
+            else isMe = false;
+            messages.Add(encodingMsg);
+            JsRuntime.InvokeVoidAsync("scrollToEnd", new object[] { chatWindow });
+            InvokeAsync(StateHasChanged);
+
 
         });
 
@@ -117,19 +120,13 @@
         username = authState.User.Identity?.Name;
         int atIndex = username.IndexOf('@');
         userShort = username.Substring(0, atIndex);
-
     }
+
+
 
     Task Send()
     {
         hubConnection.SendAsync("SendMessageExceptUser", userShort, messageInput);
-        if(messageInput != String.Empty)
-        {
-            messagesSend.Add(messageInput);
-            InvokeAsync(StateHasChanged);
-        }
-
-
         return Task.CompletedTask;
     }
 
