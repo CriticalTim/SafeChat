@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Components.Server;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
-using SafeChat.Client;
+using SafeChat.Client.Chat;
 using SafeChat.Data;
 using System.Diagnostics;
 using System.Security.Claims;

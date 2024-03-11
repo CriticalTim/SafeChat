@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using SafeChat.Client.Chat;
 using System.Security.Claims;
 
 namespace SafeChat.Client
