@@ -188,10 +188,9 @@
 .cp-contact {
     padding: 10px;
     border-bottom: 1px solid dodgerblue; /* Neon border */
-    background-color: white;
+    background-color: lightgreen;
     border-radius: 3px;
-    margin-bottom:10px;
-
+    margin-bottom: 10px;
 }
     /*.cp-contact:hover {
         background-color: #1b6ec2;*/ /* Hover effect */
