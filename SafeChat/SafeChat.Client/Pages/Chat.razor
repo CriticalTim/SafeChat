@@ -5,6 +5,7 @@
 @using System.Security.Claims;
 @using Microsoft.JSInterop;
 @using SafeChat.Client.Chat;
+@using System.Timers;
 @inject NavigationManager NavMan
 @inject AuthenticationStateProvider persAuth
 @inject IJSRuntime JsRuntime
@@ -77,6 +78,8 @@
     private List<string> contacts = new List<string>();
     private List<ChatMessage> chatMessages = new List<ChatMessage>();
 
+    private static Timer timer;
+
     private string? messageInput = String.Empty;
     public string? username;
     public string? userShort;
@@ -118,9 +121,6 @@
     protected override async Task OnParametersSetAsync()
     {
         await GetClaimsPrincipalData();
-
-
-
         await base.OnParametersSetAsync();
     }
 
@@ -180,6 +180,27 @@
         ScrollToEnd();
 
     }
+
+    //private static void SetTimer()
+    //{
+    //    // Create a timer with a one-minute interval.
+    //    timer = new Timer(60000); // 60000 milliseconds = 1 minute
+
+    //    // Hook up the Elapsed event for the timer. 
+    //    timer.Elapsed += OnTimedEvent;
+
+    //    // Start the timer
+    //    timer.AutoReset = false; // So the timer executes only once
+    //    timer.Enabled = true;
+    //}
+
+    //private static void OnTimedEvent(Object source, ElapsedEventArgs e)
+    //{
+    //    ExecuteAfterOneMinute();
+    //    timer.Stop();
+    //    timer.Dispose();
+
+    //}
 
 
 }

@@ -20,5 +20,6 @@ namespace SafeChat.Hubs
         {
             await Clients.All.SendAsync("Connected", user);
         }
+        
     }
 }
