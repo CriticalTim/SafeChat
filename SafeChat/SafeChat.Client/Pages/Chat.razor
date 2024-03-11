@@ -78,7 +78,7 @@
     private List<string> contacts = new List<string>();
     private List<ChatMessage> chatMessages = new List<ChatMessage>();
 
-    private static Timer timer;
+    private Timer timer;
 
     private string? messageInput = String.Empty;
     public string? username;
@@ -113,6 +113,16 @@
             InvokeAsync(StateHasChanged);
         });
 
+        //hubConnection.On<string>("Disconnected", (user) =>
+        //{
+        //    if (contacts.Contains(user))
+        //    {
+        //        contacts.Remove(user);
+        //    }
+        //    InvokeAsync(StateHasChanged);
+        //});
+
+        SetTimer();
 
         await hubConnection.StartAsync();
 
@@ -137,9 +147,8 @@
     Task Send()
     {
         hubConnection.SendAsync("SendMessageExceptUser", username, messageInput);
-
-        hubConnection.SendAsync("IAmOnline", username);
         return Task.CompletedTask;
+
     }
 
     Task HandleKeyUp(KeyboardEventArgs e)
@@ -181,26 +190,26 @@
 
     }
 
-    //private static void SetTimer()
-    //{
-    //    // Create a timer with a one-minute interval.
-    //    timer = new Timer(60000); // 60000 milliseconds = 1 minute
+    private void SetTimer()
+    {
+        // Create a timer with a one-minute interval.
+        timer = new Timer(5000); // 60000 milliseconds = 1 minute
 
-    //    // Hook up the Elapsed event for the timer. 
-    //    timer.Elapsed += OnTimedEvent;
+        // Hook up the Elapsed event for the timer. 
+        timer.Elapsed += OnTimedEvent;
 
-    //    // Start the timer
-    //    timer.AutoReset = false; // So the timer executes only once
-    //    timer.Enabled = true;
-    //}
+        // Start the timer
+        timer.AutoReset = false; // So the timer executes only once
+        timer.Enabled = true;
+    }
 
-    //private static void OnTimedEvent(Object source, ElapsedEventArgs e)
-    //{
-    //    ExecuteAfterOneMinute();
-    //    timer.Stop();
-    //    timer.Dispose();
+    private void OnTimedEvent(Object source, ElapsedEventArgs e)
+    {
+        contacts.Clear();
+        timer.Stop();
+        timer.Start();
 
-    //}
+    }
 
 
 }
