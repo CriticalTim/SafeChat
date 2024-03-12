@@ -9,10 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\HomePic.png" />
     <Content Remove="wwwroot\Pics\HomePic.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\HomePic.png" />
     <None Include="wwwroot\Pics\HomePic.png" />
   </ItemGroup>
 
