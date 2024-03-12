@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\HomePic.png" />
+    <Content Remove="wwwroot\HomePicture.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\HomePic.png" />
+    <None Include="wwwroot\HomePicture.png" />
   </ItemGroup>
 
 </Project>
